@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Petras Blaževičius](https://up.htmlacademy.ru/nodejs/3/user/147450).
-* Наставник: `Неизвестно`.
+* Наставник: [Владимир Якушкин](https://htmlacademy.ru/profile/id126208).
 
 ---
 
