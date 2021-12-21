@@ -36,8 +36,8 @@ const formatDate = (date) => {
   const hours = `${date.getHours()}`.padStart(2, `0`);
   const minutes = `${date.getMinutes()}`.padStart(2, `0`);
   const seconds = `${date.getSeconds()}`.padStart(2, `0`);
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-}
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
 
 const generateOffers = (count) => (
   Array(count).fill({}).map(() => {
@@ -61,7 +61,7 @@ module.exports = {
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
 
-    if (countOffer < 0 ) {
+    if (countOffer < 0) {
       console.error(`Введите положительное число.`);
       process.exit(ExitCode.error);
     }
