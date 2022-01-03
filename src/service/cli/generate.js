@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
@@ -13,16 +12,24 @@ const {
   DEFAULT_COUNT,
   MAX_COUNT,
   ExitCode,
-  TITLES,
-  SENTENCES,
   ANNOUNCE_LENGTH,
-  CATEGORIES,
   MONTH_RANGE,
-  FILE_NAME
+  FILE_PATH,
+  FILE_SENTENCES_PATH,
+  FILE_TITLES_PATH,
+  FILE_CATEGORIES_PATH,
 } = require(`./constants`);
 
 
-const FILE_PATH = path.join(__dirname, `../../../${FILE_NAME}`);
+const readContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, `utf8`);
+    return content.trim().split(`\n`);
+  } catch (err) {
+    console.error(chalk.red(err));
+    return [];
+  }
+};
 
 // https://stackoverflow.com/questions/9035627/elegant-method-to-generate-array-of-random-dates-within-two-dates
 const getRandomDate = (start, end) => {
@@ -40,12 +47,12 @@ const formatDate = (date) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-const generateOffers = (count) => (
+const generateOffers = (count, titles, sentences, categories) => (
   Array(count).fill({}).map(() => {
-    const title = TITLES[getRandomInt(0, TITLES.length - 1)];
-    const announce = shuffle(SENTENCES).slice(1, ANNOUNCE_LENGTH).join(` `);
-    const fullText = shuffle(SENTENCES).slice(1, getRandomInt(1, SENTENCES.length - 1)).join(` `);
-    const category = shuffle(CATEGORIES).slice(0, getRandomInt(1, CATEGORIES.length - 1));
+    const title = titles[getRandomInt(0, titles.length - 1)];
+    const announce = shuffle(sentences).slice(1, ANNOUNCE_LENGTH).join(` `);
+    const fullText = shuffle(sentences).slice(1, getRandomInt(1, sentences.length - 1)).join(` `);
+    const category = shuffle(categories).slice(0, getRandomInt(1, categories.length - 1));
 
     const todayDate = new Date();
     const startDate = new Date(new Date().setMonth(todayDate.getMonth() - MONTH_RANGE));
@@ -60,6 +67,9 @@ module.exports = {
   async run(args) {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
+    const titles = await readContent(FILE_TITLES_PATH);
+    const sentences = await readContent(FILE_SENTENCES_PATH);
+    const categories = await readContent(FILE_CATEGORIES_PATH);
 
 
     if (countOffer < 0) {
@@ -72,7 +82,7 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    const content = JSON.stringify(generateOffers(countOffer), null, 4);
+    const content = JSON.stringify(generateOffers(countOffer, titles, sentences, categories), null, 4);
 
     try {
       await fs.writeFile(FILE_PATH, content);
