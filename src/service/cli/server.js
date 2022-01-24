@@ -1,51 +1,19 @@
 'use strict';
 
 const chalk = require(`chalk`);
-const http = require(`http`);
-const fs = require(`fs`).promises;
-const {DEFAULT_PORT, HttpCode, FILE_NAME} = require(`./constants`);
+const express = require(`express`);
+const {DEFAULT_PORT, HttpCode} = require(`./constants`);
+const postsRoutes = require(`./routes/posts-routes`);
 
+const app = express();
 
-const sendResponse = (res, statusCode, message) => {
-  const template = `
-    <!Doctype html>
-      <html lang="ru">
-      <head>
-        <title>With love from Node</title>
-      </head>
-      <h1>Заголовоки публикации</h1>
-      <body>${message}</body>
-    </html>`.trim();
+app.use(express.json());
+app.use(`/posts`, postsRoutes);
 
-  res.statusCode = statusCode;
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`,
-  });
-
-  res.end(template);
-};
-
-const onClientConnect = async (req, res) => {
-  const notFoundMessageText = `Not found`;
-
-  switch (req.url) {
-    case `/`:
-      try {
-        const fileContent = await fs.readFile(FILE_NAME);
-        const mocks = JSON.parse(fileContent);
-        const message = mocks.map((post) => `<li>${post.title}</li>`).join(``);
-        sendResponse(res, HttpCode.OK, `<ul>${message}</ul>`);
-      } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
-      }
-
-      break;
-    default:
-      sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
-      break;
-  }
-
-};
+app.use((req, res) => res
+  .status(HttpCode.NOT_FOUND)
+  .send(`Not found`)
+);
 
 module.exports = {
   name: `--server`,
@@ -53,8 +21,7 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
-    http.createServer(onClientConnect)
-      .listen(port)
+    app.listen(port)
       .on(`listening`, (err) => {
         if (err) {
           return console.error(`Ошибка при создании сервера`, err);
