@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 
 const {
   getRandomInt,
@@ -9,15 +10,19 @@ const {
 } = require(`../../utils`);
 
 const {
-  DEFAULT_COUNT,
-  MAX_COUNT,
   ExitCode,
+  DEFAULT_COUNT,
   ANNOUNCE_LENGTH,
-  MONTH_RANGE,
   FILE_PATH,
+  FILE_CATEGORIES_PATH,
+  FILE_COMMENTS_PATH,
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
-  FILE_CATEGORIES_PATH,
+  MAX_COUNT,
+  MAX_COMMENTS,
+  MAX_COMMENTS_SENTENCES,
+  MAX_ID_LENGTH,
+  MONTH_RANGE,
 } = require(`./constants`);
 
 
@@ -47,18 +52,29 @@ const formatDate = (date) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-const generateOffers = (count, titles, sentences, categories) => (
+
+const generateComments = (count, countCommentsSentences, comments) => (
+  Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    text: shuffle(comments)
+      .slice(0, getRandomInt(1, countCommentsSentences))
+      .join(` `),
+  }))
+);
+
+const generateOffers = (count, titles, sentences, categories, _comments) => (
   Array(count).fill({}).map(() => {
+    const id = nanoid(MAX_ID_LENGTH);
     const title = titles[getRandomInt(0, titles.length - 1)];
     const announce = shuffle(sentences).slice(1, ANNOUNCE_LENGTH).join(` `);
     const fullText = shuffle(sentences).slice(1, getRandomInt(1, sentences.length - 1)).join(` `);
     const category = shuffle(categories).slice(0, getRandomInt(1, categories.length - 1));
-
+    const comments = generateComments(getRandomInt(1, MAX_COMMENTS), MAX_COMMENTS_SENTENCES, _comments);
     const todayDate = new Date();
     const startDate = new Date(new Date().setMonth(todayDate.getMonth() - MONTH_RANGE));
     const createdDate = formatDate(getRandomDate(startDate, todayDate));
 
-    return ({title, announce, fullText, createdDate, category});
+    return ({id, title, announce, fullText, createdDate, category, comments});
   })
 );
 
@@ -70,7 +86,7 @@ module.exports = {
     const titles = await readContent(FILE_TITLES_PATH);
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
-
+    const comments = await readContent(FILE_COMMENTS_PATH);
 
     if (countOffer < 0) {
       console.error(chalk.red(`Введите положительное число.`));
@@ -82,7 +98,7 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    const content = JSON.stringify(generateOffers(countOffer, titles, sentences, categories), null, 4);
+    const content = JSON.stringify(generateOffers(countOffer, titles, sentences, categories, comments), null, 4);
 
     try {
       await fs.writeFile(FILE_PATH, content);
