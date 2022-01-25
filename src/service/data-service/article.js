@@ -1,6 +1,6 @@
 'use strict';
 
-const {MAX_ID_LENGTH} = require(`../cli/constants`);
+const {MAX_ID_LENGTH} = require(`../../constants`);
 const {nanoid} = require(`nanoid`);
 
 class ArticleService {

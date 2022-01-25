@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require(`../cli/constants`);
+const {HttpCode} = require(`../../constants`);
 
 const commentKeys = [`text`];
 

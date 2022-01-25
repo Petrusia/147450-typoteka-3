@@ -1,7 +1,7 @@
 'use strict';
 
 const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH} = require(`../cli/constants`);
+const {MAX_ID_LENGTH} = require(`../../constants`);
 
 class CommentsService {
   findAll(article) {

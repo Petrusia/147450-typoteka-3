@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const {FILE_PATH} = require(`../cli/constants`);
+const {FILE_PATH} = require(`../../constants`);
 let data = [];
 
 const getMockData = async () => {

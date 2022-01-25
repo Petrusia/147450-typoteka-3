@@ -23,7 +23,7 @@ const {
   MAX_COMMENTS_SENTENCES,
   MAX_ID_LENGTH,
   MONTH_RANGE,
-} = require(`./constants`);
+} = require(`../../constants`);
 
 
 const readContent = async (filePath) => {
