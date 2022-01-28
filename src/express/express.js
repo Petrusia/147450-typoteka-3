@@ -11,6 +11,8 @@ const DEFAULT_PORT = 8080;
 const PUBLIC_DIR = `public`;
 
 const app = express();
+app.use(express.json());
+
 app.set(`views`, path.resolve(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 
