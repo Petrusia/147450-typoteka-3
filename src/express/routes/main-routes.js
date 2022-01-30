@@ -7,9 +7,10 @@ const api = require(`../api`).getAPI();
 
 mainRouter.get(`/`, async (req, res) => {
   const articles = await api.getArticles();
-  console.log(articles);
-  res.render(`main`, {articles});
+  const categories = await api.getCategories();
+  res.render(`main`, {articles, categories});
 });
+
 mainRouter.get(`/register`, (req, res) => res.render(`auth/sign-up`));
 mainRouter.get(`/login`, (req, res) => res.render(`auth/login`));
 mainRouter.get(`/search`, async (req, res) => {
@@ -27,5 +28,5 @@ mainRouter.get(`/search`, async (req, res) => {
   }
 });
 
-
+mainRouter.get(`/categories`, (req, res) => res.render(`all-categories`));
 module.exports = mainRouter;
