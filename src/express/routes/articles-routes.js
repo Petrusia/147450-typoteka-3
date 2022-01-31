@@ -7,6 +7,7 @@ const multer = require(`multer`);
 const {nanoid} = require(`nanoid`);
 const api = require(`../api`).getAPI();
 const {HttpCode} = require(`../../constants`);
+const {ensureArray} = require(`../../utils`);
 
 const UPLOAD_IMG_DIR = `../upload/img`;
 
@@ -31,7 +32,7 @@ articlesRouter.get(`/add`, async (req, res) => {
   res.render(`articles/add-post`, {article: {}, categories});
 });
 
-articlesRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
+articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
   const {body, file} = req;
 
   const newArticleData = {
@@ -39,10 +40,10 @@ articlesRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    category: Object.keys(body.category),
+    category: ensureArray(body.category),
     picture: file ? file.filename : ``
   };
-
+  console.log(newArticleData);
   try {
     await api.createArticle(newArticleData);
     res.redirect(`/my`);
