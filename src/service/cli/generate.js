@@ -18,6 +18,7 @@ const {
   FILE_COMMENTS_PATH,
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
+  MAX_CATEGORIES,
   MAX_COUNT,
   MAX_COMMENTS,
   MAX_COMMENTS_SENTENCES,
@@ -68,13 +69,14 @@ const generateOffers = (count, titles, sentences, categories, _comments) => (
     const title = titles[getRandomInt(0, titles.length - 1)];
     const announce = shuffle(sentences).slice(1, ANNOUNCE_LENGTH).join(` `);
     const fullText = shuffle(sentences).slice(1, getRandomInt(1, sentences.length - 1)).join(` `);
-    const category = shuffle(categories).slice(0, getRandomInt(1, categories.length - 1));
+    const category = shuffle(categories).slice(0, getRandomInt(1, MAX_CATEGORIES));
     const comments = generateComments(getRandomInt(1, MAX_COMMENTS), MAX_COMMENTS_SENTENCES, _comments);
+    const picture = ``;
     const todayDate = new Date();
     const startDate = new Date(new Date().setMonth(todayDate.getMonth() - MONTH_RANGE));
     const createdDate = formatDate(getRandomDate(startDate, todayDate));
 
-    return ({id, title, announce, fullText, createdDate, category, comments});
+    return ({id, title, announce, fullText, picture, createdDate, category, comments});
   })
 );
 
