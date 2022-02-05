@@ -1,8 +1,3 @@
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS articles;
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS article_categories;
 
 CREATE TABLE categories
 (
@@ -16,8 +11,8 @@ CREATE TABLE users
   first_name varchar(255) NOT NULL,
   last_name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
-  avatar varchar(50) NOT NULL
-  password_hash varchar(255) NOT NULL,
+  avatar varchar(50) NOT NULL,
+  password_hash varchar(255) NOT NULL
 );
 
 CREATE TABLE articles
@@ -46,7 +41,7 @@ CREATE TABLE comments
     ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE article_categories
+CREATE TABLE articles_categories
 (
   article_id integer NOT NULL,
   category_id integer NOT NULL,
