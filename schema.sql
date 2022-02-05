@@ -1,3 +1,17 @@
+-- * Напишите SQL для создания новой базы данных; *
+-- drop database if exists big_library;
+-- CREATE DATABASE big_library
+--   WITH
+--   OWNER = petras
+--   ENCODING = 'UTF8'
+--   TEMPLATE = template0
+--   LC_COLLATE = 'C'
+--   LC_CTYPE = 'C'
+--   CONNECTION LIMIT = -1;
+
+
+-- Напишите SQL для создания всех необходимых таблиц.
+-- Помните, в каждой таблице должен быть первичный ключ;
 DROP TABLE IF EXISTS categories CASCADE;
 CREATE TABLE categories
 (
@@ -5,6 +19,7 @@ CREATE TABLE categories
   name varchar(255) NOT NULL
 );
 
+-- Добавьте уникальные индексы полям, где должны быть только уникальные значения;
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
@@ -56,6 +71,7 @@ CREATE TABLE articles_categories
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- Добавьте обычные индексы полям, по которым будет происходить поиск;
 CREATE INDEX ON articles (title);
 
 
