@@ -30,6 +30,7 @@ CREATE TABLE articles
   created_at timestamp DEFAULT current_timestamp,
   user_id integer NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE comments
@@ -39,8 +40,10 @@ CREATE TABLE comments
   created_at timestamp DEFAULT current_timestamp,
   user_id integer NOT NULL,
   article_id integer NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
   FOREIGN KEY (article_id) REFERENCES articles(id)
+    ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE article_categories
@@ -48,8 +51,10 @@ CREATE TABLE article_categories
   article_id integer NOT NULL,
   category_id integer NOT NULL,
   PRIMARY KEY (article_id, category_id),
-  FOREIGN KEY (article_id) REFERENCES articles(id),
+  FOREIGN KEY (article_id) REFERENCES articles(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (category_id) REFERENCES categories(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE INDEX ON articles(title);
