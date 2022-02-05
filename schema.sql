@@ -4,6 +4,7 @@ CREATE TABLE categories
   id   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL
 );
+
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
@@ -14,6 +15,7 @@ CREATE TABLE users
   avatar        varchar(50)         NOT NULL,
   password_hash varchar(255)        NOT NULL
 );
+
 DROP TABLE IF EXISTS articles CASCADE;
 CREATE TABLE articles
 (
@@ -27,6 +29,7 @@ CREATE TABLE articles
   FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE SET NULL ON UPDATE CASCADE
 );
+
 DROP TABLE IF EXISTS comments CASCADE;
 CREATE TABLE comments
 (
@@ -40,6 +43,7 @@ CREATE TABLE comments
   FOREIGN KEY (article_id) REFERENCES articles (id)
     ON DELETE SET NULL ON UPDATE CASCADE
 );
+
 DROP TABLE IF EXISTS articles_categories CASCADE;
 CREATE TABLE articles_categories
 (
